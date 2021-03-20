@@ -21,16 +21,17 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
     public override func loadView() {
         let webConfiguration = WKWebViewConfiguration()
         webView = WKWebView(frame: .zero, configuration: webConfiguration)
-        webView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        webView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        webView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        webView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         webView.uiDelegate = self
         webView.navigationDelegate = self
         view.addSubview(webView)
     }
     public override func viewDidLoad() {
         super.viewDidLoad()
+        
+        webView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        webView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        webView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        webView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
         let myURL = Bundle.module.url(forResource: "index", withExtension: "html", subdirectory: "Resources")
         let myRequest = URLRequest(url: myURL!)

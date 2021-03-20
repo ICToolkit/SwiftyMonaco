@@ -21,6 +21,10 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
     public override func loadView() {
         let webConfiguration = WKWebViewConfiguration()
         webView = WKWebView(frame: .zero, configuration: webConfiguration)
+        webView.autoresizingMask = [
+            .flexibleHeight,
+            .flexibleWidth
+        ]
         webView.uiDelegate = self
         webView.navigationDelegate = self
         view = webView
@@ -32,16 +36,6 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
     }
-    
-    #if os(macOS)
-    public override func viewWillTransition(to newSize: NSSize) {
-        webView.frame = CGRect(origin: .zero, size: newSize)
-    }
-    #else
-    public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        webView.frame = CGRect(origin: .zero, size: size)
-    }
-    #endif
     
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         let javascript =

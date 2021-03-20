@@ -73,7 +73,7 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
         let javascript =
         """
         (function() {
-          editor.create({value: btoa('\(b64 ?? "")'), automaticLayout: true, theme: "\(detectTheme())"});
+          editor.create({value: atob('\(b64 ?? "")'), automaticLayout: true, theme: "\(detectTheme())"});
           var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width'); document.getElementsByTagName('head')[0].appendChild(meta);
           return true;
         })();

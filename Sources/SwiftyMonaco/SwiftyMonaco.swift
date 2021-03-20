@@ -13,14 +13,19 @@ typealias ViewControllerRepresentable = NSViewControllerRepresentable
 typealias ViewControllerRepresentable = UIViewControllerRepresentable
 #endif
 
-public struct SwiftyMonaco: ViewControllerRepresentable {
-    public init() {
-        
+public struct SwiftyMonaco: ViewControllerRepresentable, MonacoViewControllerDelegate {
+    
+    var text: Binding<String>
+    
+    public init(text: Binding<String>) {
+        self.text = text
     }
     
     #if os(macOS)
     public func makeNSViewController(context: Context) -> MonacoViewController {
-        return MonacoViewController()
+        let vc = MonacoViewController()
+        vc.delegate = self
+        return vc
     }
     
     public func updateNSViewController(_ nsViewController: MonacoViewController, context: Context) {
@@ -29,11 +34,21 @@ public struct SwiftyMonaco: ViewControllerRepresentable {
     
     #if os(iOS)
     public func makeUIViewController(context: Context) -> MonacoViewController {
-        return MonacoViewController()
+        let vc = MonacoViewController()
+        vc.delegate = self
+        return vc
     }
     
     public func updateUIViewController(_ uiViewController: MonacoViewController, context: Context) {
         
     }
     #endif
+    
+    public func monacoView(readText controller: MonacoViewController) -> String {
+        return self.text.wrappedValue
+    }
+    
+    public func monacoView(controller: MonacoViewController, textDidChange text: String) {
+        self.text.wrappedValue = text
+    }
 }

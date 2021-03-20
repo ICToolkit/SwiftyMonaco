@@ -16,10 +16,13 @@ import WebKit
 
 public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDelegate {
     
+    var delegate: MonacoViewControllerDelegate?
+    
     var webView: WKWebView!
     
     public override func loadView() {
         let webConfiguration = WKWebViewConfiguration()
+        webConfiguration.userContentController.add(UpdateTextScriptHandler(self), name: "updateText")
         webView = WKWebView(frame: .zero, configuration: webConfiguration)
         webView.uiDelegate = self
         webView.navigationDelegate = self
@@ -65,10 +68,12 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
     #endif
     
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        let text = self.delegate?.monacoView(readText: self) ?? ""
+        let b64 = text.data(using: .utf8)?.base64EncodedString()
         let javascript =
         """
         (function() {
-          editor.create({automaticLayout: true, theme: "\(detectTheme())"});
+          editor.create({value: btoa('\(b64 ?? "")'), automaticLayout: true, theme: "\(detectTheme())"});
           var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width'); document.getElementsByTagName('head')[0].appendChild(meta);
           return true;
         })();
@@ -95,4 +100,32 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
           }
         }
     }
+}
+
+private extension MonacoViewController {
+    final class UpdateTextScriptHandler: NSObject, WKScriptMessageHandler {
+        private let parent: MonacoViewController
+
+        init(_ parent: MonacoViewController) {
+            self.parent = parent
+        }
+
+        func userContentController(
+            _ userContentController: WKUserContentController,
+            didReceive message: WKScriptMessage
+            ) {
+            guard let encodedText = message.body as? String,
+            let data = Data(base64Encoded: encodedText),
+            let text = String(data: data, encoding: .utf8) else {
+                fatalError("Unexpected message body")
+            }
+
+            parent.delegate?.monacoView(controller: parent, textDidChange: text)
+        }
+    }
+}
+
+public protocol MonacoViewControllerDelegate {
+    func monacoView(readText controller: MonacoViewController) -> String
+    func monacoView(controller: MonacoViewController, textDidChange: String)
 }

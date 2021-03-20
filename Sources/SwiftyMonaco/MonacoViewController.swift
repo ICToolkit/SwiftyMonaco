@@ -27,7 +27,7 @@ public class MonacoViewController: ViewController, WKUIDelegate {
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        let myURL = Bundle.module.url(forResource: "index", withExtension: "html")
+        let myURL = Bundle.module.url(forResource: "index", withExtension: "html", subdirectory: "Resources")
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
     }

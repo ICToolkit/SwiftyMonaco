@@ -33,11 +33,31 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
         webView.load(myRequest)
     }
     
+    private func detectTheme() -> String {
+        #if os(macOS)
+        let x = NSAppearance.current.name
+        if x == .aqua {
+            return "vs"
+        } else {
+            return "vs-dark"
+        }
+        #else
+        switch traitCollection.userInterfaceStyle {
+            case .light, .unspecified:
+                return "vs"
+            case .dark:
+                return "vs-dark"
+            @unknown default:
+                return "vs"
+        }
+        #endif
+    }
+    
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         let javascript =
         """
         (function() {
-          editor.create({automaticLayout: true});
+          editor.create({automaticLayout: true, theme: "\(detectTheme())"});
           var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width'); document.getElementsByTagName('head')[0].appendChild(meta);
           return true;
         })();

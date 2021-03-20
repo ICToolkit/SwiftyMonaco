@@ -18,10 +18,22 @@ public struct SwiftyMonaco: ViewControllerRepresentable {
         
     }
     
+    #if os(macOS)
     public func makeNSViewController(context: Context) -> MonacoViewController {
         return MonacoViewController()
     }
     
     public func updateNSViewController(_ nsViewController: MonacoViewController, context: Context) {
     }
+    #endif
+    
+    #if os(iOS)
+    public func makeUIViewController(context: Context) -> MonacoViewController {
+        return MonacoViewController()
+    }
+    
+    public func updateUIViewController(_ uiViewController: MonacoViewController, context: Context) {
+        
+    }
+    #endif
 }

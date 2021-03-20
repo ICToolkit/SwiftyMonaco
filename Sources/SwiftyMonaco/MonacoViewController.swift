@@ -63,12 +63,9 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
     
     private func detectTheme() -> String {
         #if os(macOS)
-        switch NSAppearance.current.name {
-        case .aqua:
-            return "vs"
-        case .darkAqua:
+        if UserDefaults.standard.string(forKey: "AppleInterfaceStyle") == "Dark" {
             return "vs-dark"
-        default:
+        } else {
             return "vs"
         }
         #else

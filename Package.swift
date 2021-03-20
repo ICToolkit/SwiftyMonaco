@@ -29,7 +29,8 @@ let package = Package(
             name: "SwiftyMonaco",
             dependencies: [],
             resources: [
-                .copy("Resources")
+                .copy("Resources"),
+                .copy("Highlighting/Languages")
             ]),
         .testTarget(
             name: "SwiftyMonacoTests",

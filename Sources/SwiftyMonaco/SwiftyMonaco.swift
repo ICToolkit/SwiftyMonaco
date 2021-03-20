@@ -16,6 +16,7 @@ typealias ViewControllerRepresentable = UIViewControllerRepresentable
 public struct SwiftyMonaco: ViewControllerRepresentable, MonacoViewControllerDelegate {
     
     var text: Binding<String>
+    private var syntax: SyntaxHighlight?
     
     public init(text: Binding<String>) {
         self.text = text
@@ -50,5 +51,18 @@ public struct SwiftyMonaco: ViewControllerRepresentable, MonacoViewControllerDel
     
     public func monacoView(controller: MonacoViewController, textDidChange text: String) {
         self.text.wrappedValue = text
+    }
+    
+    public func monacoView(getSyntax controller: MonacoViewController) -> SyntaxHighlight? {
+        return syntax
+    }
+}
+
+// MARK: - Modifiers
+public extension SwiftyMonaco {
+    func syntaxHighlight(_ syntax: SyntaxHighlight) -> Self {
+        var m = self
+        m.syntax = syntax
+        return m
     }
 }

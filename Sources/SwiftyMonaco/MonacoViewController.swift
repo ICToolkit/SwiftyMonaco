@@ -23,11 +23,10 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
         webView = WKWebView(frame: .zero, configuration: webConfiguration)
         webView.uiDelegate = self
         webView.navigationDelegate = self
+        view = webView
     }
     public override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.addSubview(webView)
         
         let myURL = Bundle.module.url(forResource: "index", withExtension: "html", subdirectory: "Resources")
         let myRequest = URLRequest(url: myURL!)
@@ -39,6 +38,7 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
         """
         (function() {
           editor.create({});
+          var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width'); document.getElementsByTagName('head')[0].appendChild(meta);
           return true;
         })();
         """

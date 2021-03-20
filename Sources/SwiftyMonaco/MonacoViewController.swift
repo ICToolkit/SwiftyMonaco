@@ -68,14 +68,29 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
     #endif
     
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        // Syntax Highlighting
+        let syntax = self.delegate?.monacoView(getSyntax: self)
+        let b64Syntax = syntax?.configuration.data(using: .utf8)?.base64EncodedString()
+        let syntaxJS = b64Syntax != nil ? """
+        // Register a new language
+        monaco.languages.register({ id: 'mySpecialLanguage' });
+
+        // Register a tokens provider for the language
+        monaco.languages.setMonarchTokensProvider('mySpecialLanguage', JSON.parse(atob('\(b64Syntax!)')));
+        """ : ""
+        let syntaxJS2 = b64Syntax != nil ? ", language: 'mySpecialLanguage'" : ""
+        
+        // Code itself
         let text = self.delegate?.monacoView(readText: self) ?? ""
         let b64 = text.data(using: .utf8)?.base64EncodedString()
         let javascript =
         """
         (function() {
-          editor.create({value: atob('\(b64 ?? "")'), automaticLayout: true, theme: "\(detectTheme())"});
-          var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width'); document.getElementsByTagName('head')[0].appendChild(meta);
-          return true;
+        \(syntaxJS)
+
+        editor.create({value: atob('\(b64 ?? "")'), automaticLayout: true, theme: "\(detectTheme())"\(syntaxJS2)});
+        var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width'); document.getElementsByTagName('head')[0].appendChild(meta);
+        return true;
         })();
         """
         webView.evaluateJavaScript(javascript, in: nil, in: WKContentWorld.page) {
@@ -127,5 +142,6 @@ private extension MonacoViewController {
 
 public protocol MonacoViewControllerDelegate {
     func monacoView(readText controller: MonacoViewController) -> String
+    func monacoView(getSyntax controller: MonacoViewController) -> SyntaxHighlight?
     func monacoView(controller: MonacoViewController, textDidChange: String)
 }

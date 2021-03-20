@@ -34,7 +34,6 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
         view = webView
         #if os(macOS)
         DistributedNotificationCenter.default.addObserver(self, selector: #selector(interfaceModeChanged(sender:)), name: NSNotification.Name(rawValue: "AppleInterfaceThemeChangedNotification"), object: nil)
-        #else
         #endif
     }
     public override func viewDidLoad() {

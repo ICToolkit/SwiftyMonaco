@@ -23,7 +23,11 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
         webView = WKWebView(frame: .zero, configuration: webConfiguration)
         webView.uiDelegate = self
         webView.navigationDelegate = self
+        #if os(iOS)
         webView.backgroundColor = .none
+        #else
+        webView.layer?.backgroundColor = NSColor.clear.cgColor
+        #endif
         view = webView
     }
     public override func viewDidLoad() {

@@ -100,7 +100,7 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
             #if os(macOS)
             let alert = NSAlert()
             alert.messageText = "Error"
-            alert.informativeText = "Something went wrong while evaluating \(error.localizedDescription)"
+            alert.informativeText = "Something went wrong while evaluating \(error.localizedDescription): \(javascript)"
             alert.alertStyle = .critical
             alert.addButton(withTitle: "OK")
             alert.runModal()

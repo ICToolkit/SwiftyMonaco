@@ -70,15 +70,16 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         // Syntax Highlighting
         let syntax = self.delegate?.monacoView(getSyntax: self)
-        let b64Syntax = syntax?.configuration.data(using: .utf8)?.base64EncodedString()
-        let syntaxJS = b64Syntax != nil ? """
+        let syntaxJS = syntax != nil ? """
         // Register a new language
         monaco.languages.register({ id: 'mySpecialLanguage' });
 
         // Register a tokens provider for the language
-        monaco.languages.setMonarchTokensProvider('mySpecialLanguage', JSON.parse(atob('\(b64Syntax!)')));
+        monaco.languages.setMonarchTokensProvider('mySpecialLanguage', (function() {
+            \(syntax!.configuration)
+        })());
         """ : ""
-        let syntaxJS2 = b64Syntax != nil ? ", language: 'mySpecialLanguage'" : ""
+        let syntaxJS2 = syntax != nil ? ", language: 'mySpecialLanguage'" : ""
         
         // Code itself
         let text = self.delegate?.monacoView(readText: self) ?? ""

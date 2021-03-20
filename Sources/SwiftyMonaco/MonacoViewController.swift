@@ -50,14 +50,22 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
     }
     
     // MARK: - Dark Mode
+    private func updateTheme() {
+        evaluateJavascript("""
+        (function(){
+            monaco.editor.setTheme('\(detectTheme())')
+        })()
+        """)
+    }
+    
     #if os(macOS)
     @objc private func interfaceModeChanged(sender: NSNotification) {
-        loadMonaco()
+        updateTheme()
     }
     #else
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        loadMonaco()
+        updateTheme()
     }
     #endif
     
@@ -108,6 +116,10 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
         return true;
         })();
         """
+        evaluateJavascript(javascript)
+    }
+    
+    private func evaluateJavascript(_ javascript: String) {
         webView.evaluateJavaScript(javascript, in: nil, in: WKContentWorld.page) {
           result in
           switch result {

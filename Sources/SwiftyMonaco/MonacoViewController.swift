@@ -32,22 +32,44 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
         webView.layer?.backgroundColor = NSColor.clear.cgColor
         #endif
         view = webView
+        #if os(macOS)
+        DistributedNotificationCenter.default.addObserver(self, selector: #selector(interfaceModeChanged(sender:)), name: NSNotification.Name(rawValue: "AppleInterfaceThemeChangedNotification"), object: nil)
+        #else
+        #endif
     }
     public override func viewDidLoad() {
         super.viewDidLoad()
         
+        loadMonaco()
+    }
+    
+    private func loadMonaco() {
         let myURL = Bundle.module.url(forResource: "index", withExtension: "html", subdirectory: "Resources")
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
     }
     
+    // MARK: - Dark Mode
+    #if os(macOS)
+    @objc private func interfaceModeChanged(sender: NSNotification) {
+        loadMonaco()
+    }
+    #else
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        loadMonaco()
+    }
+    #endif
+    
     private func detectTheme() -> String {
         #if os(macOS)
-        let x = NSAppearance.current.name
-        if x == .aqua {
+        switch NSAppearance.current.name {
+        case .aqua:
             return "vs"
-        } else {
+        case .darkAqua:
             return "vs-dark"
+        default:
+            return "vs"
         }
         #else
         switch traitCollection.userInterfaceStyle {
@@ -61,12 +83,7 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
         #endif
     }
     
-    #if os(iOS)
-    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-    }
-    #endif
-    
+    // MARK: - WKWebView
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         // Syntax Highlighting
         let syntax = self.delegate?.monacoView(getSyntax: self)
@@ -118,6 +135,8 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
     }
 }
 
+// MARK: - Handler
+
 private extension MonacoViewController {
     final class UpdateTextScriptHandler: NSObject, WKScriptMessageHandler {
         private let parent: MonacoViewController
@@ -140,6 +159,8 @@ private extension MonacoViewController {
         }
     }
 }
+
+// MARK: - Delegate
 
 public protocol MonacoViewControllerDelegate {
     func monacoView(readText controller: MonacoViewController) -> String

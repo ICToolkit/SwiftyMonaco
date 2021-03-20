@@ -61,7 +61,8 @@ public struct SwiftyMonaco: ViewControllerRepresentable, MonacoViewControllerDel
 // MARK: - Modifiers
 public extension SwiftyMonaco {
     mutating func setSyntaxHighlight(_ syntax: SyntaxHighlight) -> Self {
-        self.syntax = syntax
-        return self
+        var m = self
+        m.syntax = syntax
+        return m
     }
 }

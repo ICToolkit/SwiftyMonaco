@@ -23,6 +23,7 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
         webView = WKWebView(frame: .zero, configuration: webConfiguration)
         webView.uiDelegate = self
         webView.navigationDelegate = self
+        webView.backgroundColor = .none
         view = webView
     }
     public override func viewDidLoad() {
@@ -52,6 +53,12 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
         }
         #endif
     }
+    
+    #if os(iOS)
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+    }
+    #endif
     
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         let javascript =

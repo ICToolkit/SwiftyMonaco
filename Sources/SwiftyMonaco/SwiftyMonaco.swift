@@ -14,6 +14,10 @@ typealias ViewControllerRepresentable = UIViewControllerRepresentable
 #endif
 
 public struct SwiftyMonaco: ViewControllerRepresentable {
+    public init() {
+        
+    }
+    
     public func makeNSViewController(context: Context) -> MonacoViewController {
         return MonacoViewController()
     }

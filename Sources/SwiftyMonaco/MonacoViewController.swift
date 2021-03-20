@@ -21,13 +21,13 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
     public override func loadView() {
         let webConfiguration = WKWebViewConfiguration()
         webView = WKWebView(frame: .zero, configuration: webConfiguration)
-        webView.autoresizingMask = [
-            .flexibleHeight,
-            .flexibleWidth
-        ]
+        webView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        webView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        webView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        webView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         webView.uiDelegate = self
         webView.navigationDelegate = self
-        view = webView
+        view.addSubview(webView)
     }
     public override func viewDidLoad() {
         super.viewDidLoad()

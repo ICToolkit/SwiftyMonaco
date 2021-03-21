@@ -47,3 +47,8 @@ let syntax = SyntaxHighlight(title: "My custom language", fileURL: Bundle.module
 let syntax = SyntaxHighlight(title: "My custom language", configuration: "...")
 ```
 You can create your own syntax at [Monaco Editor Monarch](https://microsoft.github.io/monaco-editor/monarch.html) website
+
+# Interface theme detection
+`SwiftyMonaco` automatically detects interface theme changes and updates Monaco Editor theme according to it without dropping the current state of the editor.
+<img width="1012" alt="image" src="https://user-images.githubusercontent.com/17158860/111897521-60620800-8a31-11eb-9250-ec45b40e56cf.png">
+<img width="1012" alt="image" src="https://user-images.githubusercontent.com/17158860/111897745-b7b4a800-8a32-11eb-8783-d21d96b4cc10.png">

@@ -17,6 +17,10 @@ struct EditorView: View {
     }
 }
 ```
+**Remember!** You should allow outgoing internet connections in your app before using this library, because Monaco Editor runs inside `WKWebView` and macOS considers it as an outgoing internet connection (`Network -> Outgoing connections (Client)`):
+
+<img width="1512" alt="image" src="https://user-images.githubusercontent.com/17158860/131391125-996cf6de-228b-41f4-b240-722437a62f64.png">
+
 ## Syntax Highlighting
 Also you can use `SwiftyMonaco` with syntax highlighting by passing `SyntaxHighlight` rule:
 ```swift

@@ -18,6 +18,7 @@ public struct SwiftyMonaco: ViewControllerRepresentable, MonacoViewControllerDel
     var text: Binding<String>
     private var syntax: SyntaxHighlight?
     private var _minimap: Bool = true
+    private var _scrollbar: Bool = true
     
     public init(text: Binding<String>) {
         self.text = text
@@ -61,6 +62,10 @@ public struct SwiftyMonaco: ViewControllerRepresentable, MonacoViewControllerDel
     public func monacoView(getMinimap controller: MonacoViewController) -> Bool {
         return _minimap
     }
+    
+    public func monacoView(getScrollbar controller: MonacoViewController) -> Bool {
+        return _scrollbar
+    }
 }
 
 // MARK: - Modifiers
@@ -76,6 +81,14 @@ public extension SwiftyMonaco {
     func minimap(_ enabled: Bool) -> Self {
         var m = self
         m._minimap = enabled
+        return m
+    }
+}
+
+public extension SwiftyMonaco {
+    func scrollbar(_ enabled: Bool) -> Self {
+        var m = self
+        m._scrollbar = enabled
         return m
     }
 }

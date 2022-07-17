@@ -104,7 +104,11 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
         
         // Minimap
         let _minimap = self.delegate?.monacoView(getMinimap: self)
-        let minimap = "minimap: { enabled: \(_minimap) }"
+        let minimap = "minimap: { enabled: \(_minimap ?? true) }"
+        
+        // Scrollbar
+        let _scrollbar = self.delegate?.monacoView(getScrollbar: self)
+        let scrollbar = "scrollbar: { vertical: \(_scrollbar ?? true ? "\"visible\"" : "\"hidden\"") }"
         
         // Code itself
         let text = self.delegate?.monacoView(readText: self) ?? ""
@@ -114,7 +118,7 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
         (function() {
         \(syntaxJS)
 
-        editor.create({value: atob('\(b64 ?? "")'), automaticLayout: true, theme: "\(detectTheme())"\(syntaxJS2), \(minimap)});
+        editor.create({value: atob('\(b64 ?? "")'), automaticLayout: true, theme: "\(detectTheme())"\(syntaxJS2), \(minimap), \(scrollbar)});
         var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width'); document.getElementsByTagName('head')[0].appendChild(meta);
         return true;
         })();
@@ -177,5 +181,7 @@ private extension MonacoViewController {
 public protocol MonacoViewControllerDelegate {
     func monacoView(readText controller: MonacoViewController) -> String
     func monacoView(getSyntax controller: MonacoViewController) -> SyntaxHighlight?
+    func monacoView(getMinimap controller: MonacoViewController) -> Bool
+    func monacoView(getScrollbar controller: MonacoViewController) -> Bool
     func monacoView(controller: MonacoViewController, textDidChange: String)
 }

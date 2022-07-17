@@ -17,6 +17,7 @@ public struct SwiftyMonaco: ViewControllerRepresentable, MonacoViewControllerDel
     
     var text: Binding<String>
     private var syntax: SyntaxHighlight?
+    private var _minimap: Bool = true
     
     public init(text: Binding<String>) {
         self.text = text
@@ -56,6 +57,10 @@ public struct SwiftyMonaco: ViewControllerRepresentable, MonacoViewControllerDel
     public func monacoView(getSyntax controller: MonacoViewController) -> SyntaxHighlight? {
         return syntax
     }
+    
+    public func monacoView(getMinimap controller: MonacoViewController) -> Bool {
+        return _minimap
+    }
 }
 
 // MARK: - Modifiers
@@ -63,6 +68,14 @@ public extension SwiftyMonaco {
     func syntaxHighlight(_ syntax: SyntaxHighlight) -> Self {
         var m = self
         m.syntax = syntax
+        return m
+    }
+}
+
+public extension SwiftyMonaco {
+    func minimap(_ enabled: Bool) -> Self {
+        var m = self
+        m._minimap = enabled
         return m
     }
 }

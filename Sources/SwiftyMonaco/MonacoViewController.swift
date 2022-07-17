@@ -102,6 +102,10 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
         """ : ""
         let syntaxJS2 = syntax != nil ? ", language: 'mySpecialLanguage'" : ""
         
+        // Minimap
+        let _minimap = self.delegate?.monacoView(getMinimap: self)
+        let minimap = "minimap: { enabled: \(_minimap) }"
+        
         // Code itself
         let text = self.delegate?.monacoView(readText: self) ?? ""
         let b64 = text.data(using: .utf8)?.base64EncodedString()
@@ -110,7 +114,7 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
         (function() {
         \(syntaxJS)
 
-        editor.create({value: atob('\(b64 ?? "")'), automaticLayout: true, theme: "\(detectTheme())"\(syntaxJS2)});
+        editor.create({value: atob('\(b64 ?? "")'), automaticLayout: true, theme: "\(detectTheme())"\(syntaxJS2), \(minimap)});
         var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width'); document.getElementsByTagName('head')[0].appendChild(meta);
         return true;
         })();

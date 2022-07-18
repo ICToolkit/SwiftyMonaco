@@ -102,6 +102,26 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
         """ : ""
         let syntaxJS2 = syntax != nil ? ", language: 'mySpecialLanguage'" : ""
         
+        // Minimap
+        let _minimap = self.delegate?.monacoView(getMinimap: self)
+        let minimap = "minimap: { enabled: \(_minimap ?? true) }"
+        
+        // Scrollbar
+        let _scrollbar = self.delegate?.monacoView(getScrollbar: self)
+        let scrollbar = "scrollbar: { vertical: \(_scrollbar ?? true ? "\"visible\"" : "\"hidden\"") }"
+        
+        // Smooth Cursor
+        let _smoothCursor = self.delegate?.monacoView(getSmoothCursor: self)
+        let smoothCursor = "cursorSmoothCaretAnimation: \(_smoothCursor ?? false)"
+        
+        // Cursor Blinking
+        let _cursorBlink = self.delegate?.monacoView(getCursorBlink: self)
+        let cursorBlink = "cursorBlinking: \"\(_cursorBlink ?? .blink)\""
+        
+        // Font size
+        let _fontSize = self.delegate?.monacoView(getFontSize: self)
+        let fontSize = "fontSize: \(_fontSize ?? 12)"
+        
         // Code itself
         let text = self.delegate?.monacoView(readText: self) ?? ""
         let b64 = text.data(using: .utf8)?.base64EncodedString()
@@ -110,7 +130,7 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
         (function() {
         \(syntaxJS)
 
-        editor.create({value: atob('\(b64 ?? "")'), automaticLayout: true, theme: "\(detectTheme())"\(syntaxJS2)});
+        editor.create({value: atob('\(b64 ?? "")'), automaticLayout: true, theme: "\(detectTheme())"\(syntaxJS2), \(minimap), \(scrollbar), \(smoothCursor), \(cursorBlink), \(fontSize)});
         var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width'); document.getElementsByTagName('head')[0].appendChild(meta);
         return true;
         })();
@@ -173,5 +193,10 @@ private extension MonacoViewController {
 public protocol MonacoViewControllerDelegate {
     func monacoView(readText controller: MonacoViewController) -> String
     func monacoView(getSyntax controller: MonacoViewController) -> SyntaxHighlight?
+    func monacoView(getMinimap controller: MonacoViewController) -> Bool
+    func monacoView(getScrollbar controller: MonacoViewController) -> Bool
+    func monacoView(getSmoothCursor controller: MonacoViewController) -> Bool
+    func monacoView(getCursorBlink controller: MonacoViewController) -> CursorBlink
+    func monacoView(getFontSize controller: MonacoViewController) -> Int
     func monacoView(controller: MonacoViewController, textDidChange: String)
 }

@@ -43,7 +43,7 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
     }
     
     private func loadMonaco() {
-        let myURL = Bundle.module.url(forResource: "index", withExtension: "html", subdirectory: "Resources")
+        let myURL = Bundle.module.url(forResource: "index", withExtension: "html", subdirectory: "_Resources")
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
     }

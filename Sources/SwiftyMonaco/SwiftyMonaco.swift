@@ -19,6 +19,7 @@ public struct SwiftyMonaco: ViewControllerRepresentable, MonacoViewControllerDel
     private var syntax: SyntaxHighlight?
     private var _minimap: Bool = true
     private var _scrollbar: Bool = true
+    private var _wordWrap: Bool = false
     private var _smoothCursor: Bool = false
     private var _cursorBlink: CursorBlink = .blink
     private var _fontSize: Int = 12
@@ -68,6 +69,10 @@ public struct SwiftyMonaco: ViewControllerRepresentable, MonacoViewControllerDel
     
     public func monacoView(getScrollbar controller: MonacoViewController) -> Bool {
         return _scrollbar
+    }
+    
+    public func monacoView(getWordWrap controller: MonacoViewController) -> Bool {
+        return _wordWrap
     }
     
     public func monacoView(getSmoothCursor controller: MonacoViewController) -> Bool {

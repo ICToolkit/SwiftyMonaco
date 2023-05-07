@@ -110,6 +110,10 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
         let _scrollbar = self.delegate?.monacoView(getScrollbar: self)
         let scrollbar = "scrollbar: { vertical: \(_scrollbar ?? true ? "\"visible\"" : "\"hidden\"") }"
         
+        // WordWrap
+        let _wordWrap = self.delegate?.monacoView(getWordWrap: self)
+        let wordWrap = "wordWrap: \(_wordWrap ?? false)"
+        
         // Smooth Cursor
         let _smoothCursor = self.delegate?.monacoView(getSmoothCursor: self)
         let smoothCursor = "cursorSmoothCaretAnimation: \(_smoothCursor ?? false)"
@@ -195,6 +199,7 @@ public protocol MonacoViewControllerDelegate {
     func monacoView(getSyntax controller: MonacoViewController) -> SyntaxHighlight?
     func monacoView(getMinimap controller: MonacoViewController) -> Bool
     func monacoView(getScrollbar controller: MonacoViewController) -> Bool
+    func monacoView(getWordWrap controller: MonacoViewController) -> Bool
     func monacoView(getSmoothCursor controller: MonacoViewController) -> Bool
     func monacoView(getCursorBlink controller: MonacoViewController) -> CursorBlink
     func monacoView(getFontSize controller: MonacoViewController) -> Int

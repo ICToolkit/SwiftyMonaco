@@ -114,6 +114,14 @@ public extension SwiftyMonaco {
 }
 
 public extension SwiftyMonaco {
+    func wordWrap(_ enabled: Bool) -> Self {
+        var m = self
+        m._wordWrap = enabled
+        return m
+    }
+}
+
+public extension SwiftyMonaco {
     func smoothCursor(_ enabled: Bool) -> Self {
         var m = self
         m._smoothCursor = enabled

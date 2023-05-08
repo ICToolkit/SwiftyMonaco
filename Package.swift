@@ -29,7 +29,7 @@ let package = Package(
             name: "SwiftyMonaco",
             dependencies: [],
             resources: [
-                .copy("Resources"),
+                .process("Resources"), // Fails code signing with .copy for some reason.
                 .copy("Highlighting/Languages")
             ]),
         .testTarget(

@@ -30,7 +30,6 @@ let package = Package(
             dependencies: [],
             resources: [
                 .process("Resources"), // Fails code signing with .copy for some reason.
-                .copy("Highlighting/Languages")
             ]),
         .testTarget(
             name: "SwiftyMonacoTests",

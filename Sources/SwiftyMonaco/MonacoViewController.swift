@@ -43,7 +43,7 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
     }
     
     private func loadMonaco() {
-        let myURL = Bundle.module.url(forResource: "index", withExtension: "html", subdirectory: "Resources")
+        let myURL = Bundle.module.url(forResource: "index", withExtension: "html", subdirectory: "_Resources")
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
     }
@@ -122,6 +122,18 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
         let _fontSize = self.delegate?.monacoView(getFontSize: self)
         let fontSize = "fontSize: \(_fontSize ?? 12)"
         
+        var theme = detectTheme()
+        
+        if let _theme = self.delegate?.monacoView(getTheme: self) {
+            switch _theme {
+            case .light:
+                theme = "vs"
+            case .dark:
+                theme = "vs-dark"
+            }
+        }
+        
+        
         // Code itself
         let text = self.delegate?.monacoView(readText: self) ?? ""
         let b64 = text.data(using: .utf8)?.base64EncodedString()
@@ -130,7 +142,7 @@ public class MonacoViewController: ViewController, WKUIDelegate, WKNavigationDel
         (function() {
         \(syntaxJS)
 
-        editor.create({value: atob('\(b64 ?? "")'), automaticLayout: true, theme: "\(detectTheme())"\(syntaxJS2), \(minimap), \(scrollbar), \(smoothCursor), \(cursorBlink), \(fontSize)});
+        editor.create({value: atob('\(b64 ?? "")'), automaticLayout: true, theme: "\(theme)"\(syntaxJS2), \(minimap), \(scrollbar), \(smoothCursor), \(cursorBlink), \(fontSize)});
         var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width'); document.getElementsByTagName('head')[0].appendChild(meta);
         return true;
         })();
@@ -198,5 +210,6 @@ public protocol MonacoViewControllerDelegate {
     func monacoView(getSmoothCursor controller: MonacoViewController) -> Bool
     func monacoView(getCursorBlink controller: MonacoViewController) -> CursorBlink
     func monacoView(getFontSize controller: MonacoViewController) -> Int
+    func monacoView(getTheme controller: MonacoViewController) -> Theme?
     func monacoView(controller: MonacoViewController, textDidChange: String)
 }

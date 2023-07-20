@@ -22,6 +22,7 @@ public struct SwiftyMonaco: ViewControllerRepresentable, MonacoViewControllerDel
     private var _smoothCursor: Bool = false
     private var _cursorBlink: CursorBlink = .blink
     private var _fontSize: Int = 12
+    private var _theme: Theme? = nil
     
     public init(text: Binding<String>) {
         self.text = text
@@ -81,6 +82,10 @@ public struct SwiftyMonaco: ViewControllerRepresentable, MonacoViewControllerDel
     public func monacoView(getFontSize controller: MonacoViewController) -> Int {
         return _fontSize
     }
+    
+    public func monacoView(getTheme controller: MonacoViewController) -> Theme? {
+        return _theme
+    }
 }
 
 // MARK: - Modifiers
@@ -128,6 +133,14 @@ public extension SwiftyMonaco {
     func fontSize(_ size: Int) -> Self {
         var m = self
         m._fontSize = size
+        return m
+    }
+}
+
+public extension SwiftyMonaco {
+    func theme(_ theme: Theme) -> Self {
+        var m = self
+        m._theme = theme
         return m
     }
 }

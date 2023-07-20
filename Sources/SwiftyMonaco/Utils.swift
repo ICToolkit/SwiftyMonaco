@@ -11,3 +11,7 @@ public enum CursorBlink {
     // cursorBlinking?: "blink" | "smooth" | "phase" | "expand" | "solid"
     case blink, smooth, phase, expand, solid
 }
+
+public enum Theme {
+    case light, dark
+}
